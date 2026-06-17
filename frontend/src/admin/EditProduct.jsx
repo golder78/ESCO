@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import AdminLayout from "./AdminLayout"
-import ProductForm from "./Products"
+import ProductForm from "./Productform"
 import Loading from "../components/Loading"
 import { getProductById, updateProduct } from "../services/productService"
 

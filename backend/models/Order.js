@@ -44,6 +44,14 @@ const orderSchema = new mongoose.Schema(
       default: "Pending",
     },
 
+    paymentMethod: {
+      type: String,
+      enum: ["mpesa", "card", "bank_transfer"],
+      default: "mpesa",
+    },
+
+    mpesaTransactionRef: String,
+
     orderStatus: {
       type: String,
       enum: [

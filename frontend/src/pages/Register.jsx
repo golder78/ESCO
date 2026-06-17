@@ -51,7 +51,7 @@ export default function Register() {
     <div className="auth-wrapper">
       <div className="auth-card">
         <h1>Create an account</h1>
-        <p className="subtitle">Join ShopHub and start shopping today.</p>
+        <p className="subtitle">Join EscoProject and start shopping today.</p>
 
         {error && <div className="alert alert-error">{error}</div>}
 

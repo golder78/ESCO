@@ -77,8 +77,6 @@ export default function Products() {
             {categories.map((c) => (
               <option key={c} value={c}>
                 {c}
-                <option value="storage boxes">Storage Boxes</option>
-                <option value="accessories">Accessories</option>
               </option>
             ))}
           </select>

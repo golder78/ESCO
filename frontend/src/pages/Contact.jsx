@@ -1,18 +1,31 @@
 import { useState } from "react"
+import contactService from "../services/contactService"
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" })
   const [sent, setSent] = useState(false)
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // No backend endpoint defined for contact; show a confirmation locally.
-    setSent(true)
-    setForm({ name: "", email: "", message: "" })
+    setLoading(true)
+    setError("")
+    setSent(false)
+
+    try {
+      await contactService.submitContact(form)
+      setSent(true)
+      setForm({ name: "", email: "", message: "" })
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to send message. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -26,6 +39,12 @@ export default function Contact() {
         {sent && (
           <div className="alert alert-success">
             Thanks for reaching out! We&apos;ll reply soon.
+          </div>
+        )}
+
+        {error && (
+          <div className="alert alert-error">
+            {error}
           </div>
         )}
 
@@ -71,8 +90,8 @@ export default function Contact() {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary">
-            Send Message
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? "Sending..." : "Send Message"}
           </button>
         </form>
       </div>

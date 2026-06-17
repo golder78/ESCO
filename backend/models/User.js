@@ -27,6 +27,15 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    emailVerificationToken: String,
+
+    emailVerificationExpires: Date,
   },
   {
     timestamps: true,
@@ -34,9 +43,9 @@ const userSchema = new mongoose.Schema(
 );
 
 // Hash password before saving
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
   if (!this.isModified("password")) {
-    return next();
+    return;
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -45,8 +54,6 @@ userSchema.pre("save", async function (next) {
     this.password,
     salt
   );
-
-  next();
 });
 
 // Compare password during login

@@ -1,5 +1,7 @@
 const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
+const generateEmailToken = require("../utils/generateEmailToken");
+const { sendWelcomeEmail } = require("../services/emailService");
 
 const registerUser = async (req, res) => {
   try {
@@ -16,14 +18,20 @@ const registerUser = async (req, res) => {
       });
     }
 
+    const { token: verificationToken, expires: verificationExpires } = generateEmailToken();
+
     const user = await User.create({
       name,
       email,
       password,
+      emailVerificationToken: verificationToken,
+      emailVerificationExpires: verificationExpires,
     });
 
     if (user) {
-      res.status(201).json({
+      await sendWelcomeEmail(user, verificationToken);
+
+      return res.status(201).json({
         _id: user._id,
         name: user.name,
         email: user.email,
@@ -31,7 +39,7 @@ const registerUser = async (req, res) => {
         token: generateToken(user._id),
       });
     }
-    
+
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -52,7 +60,7 @@ const loginUser = async (req, res) => {
       user &&
       (await user.matchPassword(password))
     ) {
-      res.json({
+      return res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
@@ -60,7 +68,7 @@ const loginUser = async (req, res) => {
         token: generateToken(user._id),
       });
     } else {
-      res.status(401).json({
+      return res.status(401).json({
         message: "Invalid credentials",
       });
     }

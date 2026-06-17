@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="container footer-inner">
         <div>
-          <h3>ShopHub</h3>
+          <h3>EscoProject</h3>
           <p style={{ fontSize: "0.9rem", maxWidth: "260px" }}>
             Quality products at honest prices, delivered fast to your door.
           </p>
