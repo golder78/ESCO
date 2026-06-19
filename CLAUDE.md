@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Esco** is an e-commerce platform MVP built with React (frontend) and Express (backend) with MongoDB for persistence. The project enables customers to browse products, manage shopping carts, and place orders, with an admin dashboard for product/order management.
 
 **Key Stack:**
+
 - Frontend: React 19 + Vite + React Router
 - Backend: Node.js + Express.js + Mongoose
 - Database: MongoDB (local: `mongodb://127.0.0.1:27017/esco`)
@@ -15,15 +16,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development Quickstart
 
 ### Backend
+
 ```bash
 cd backend
 npm install
 npm run dev           # Run with nodemon (watches for changes)
 npm start             # Run production server
 ```
+
 Backend runs on `http://localhost:5000` by default. See `.env` for configuration (PORT, MONGO_URI, JWT_SECRET).
 
 ### Frontend
+
 ```bash
 cd frontend
 npm install
@@ -31,10 +35,13 @@ npm run dev           # Start Vite dev server (usually http://localhost:5173)
 npm run build         # Build for production
 npm run lint          # Run ESLint
 ```
+
 The frontend connects to the backend via the API client configured in `src/services/api.js`. Default backend URL is `http://localhost:5000/api`, overridable via `VITE_API_URL` environment variable (create a `.env.local` file in the frontend directory if needed).
 
 ### Database
+
 MongoDB must be running locally. Start with:
+
 ```bash
 mongod
 ```
@@ -42,6 +49,7 @@ mongod
 ## Architecture
 
 ### Frontend Structure
+
 - **`src/pages/`** – Route-level components (Register, Products, etc.)
 - **`src/components/`** – Reusable UI components (Navbar, ProductCard, etc.)
 - **`src/services/`** – API calls and business logic
@@ -53,6 +61,7 @@ mongod
 - **`public/`** – Static assets
 
 ### Backend Structure
+
 - **`routes/`** – API endpoints (`authRoutes`, `productRoutes`, `cartRoutes`)
 - **`controllers/`** – Request handlers for each route
 - **`models/`** – Mongoose schemas (User, Product, Order, Cart)
@@ -63,6 +72,7 @@ mongod
 ## API Integration
 
 ### Request Flow
+
 1. Frontend component calls a service method (e.g., `authService.login()`)
 2. Service makes an axios request via the `api` client
 3. `api.js` automatically appends JWT from localStorage as `Authorization: Bearer <token>`
@@ -71,6 +81,7 @@ mongod
 6. Response interceptor in `api.js` redirects to login on 401 (token expired)
 
 ### Key Endpoints
+
 - `POST /api/auth/register` – Create user account
 - `POST /api/auth/login` – Authenticate and receive JWT
 - `GET /api/products` – List all products
@@ -79,6 +90,7 @@ mongod
 - `POST /api/cart` – Add item to cart
 
 ### Backend Environment (.env)
+
 ```
 PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/esco
@@ -96,6 +108,7 @@ JWT_SECRET=mysecretkey
 ## File Changes to Track
 
 Files with recent changes (as of commit `6d755c6`):
+
 - `frontend/src/admin/AddProduct.jsx` – Admin product form
 - `frontend/src/components/Footer.jsx`
 - `frontend/src/pages/Products.jsx` – Product listing
@@ -104,18 +117,22 @@ Files with recent changes (as of commit `6d755c6`):
 ## Common Development Tasks
 
 ### Adding an API Endpoint
+
 1. Create controller function in `backend/controllers/`
 2. Add route to `backend/routes/`
 3. Create service wrapper in `frontend/src/services/`
 4. Call service from a React component or context
 
 ### Testing Backend Locally
+
 Use a tool like Postman or curl. Example:
+
 ```bash
 curl -X GET http://localhost:5000/api/products
 ```
 
 ### Running Both Servers Concurrently
+
 Open two terminal tabs/windows and run `npm run dev` in each (one for backend, one for frontend).
 
 ## Important Notes

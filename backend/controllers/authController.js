@@ -29,15 +29,24 @@ const registerUser = async (req, res) => {
     });
 
     if (user) {
-      await sendWelcomeEmail(user, verificationToken);
+      console.log ("Sending welcome email to:", user.email);
+      const result = await sendWelcomeEmail(user, verificationToken);
 
-      return res.status(201).json({
+      if(result) {
+        return res.status(201).json({
         _id: user._id,
         name: user.name,
         email: user.email,
         role: user.role,
         token: generateToken(user._id),
       });
+      } else {
+        res.status(409).json({
+          message: "Error sending welcome message"
+        })
+      }
+
+      
     }
 
   } catch (error) {
